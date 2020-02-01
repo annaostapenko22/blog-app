@@ -26,7 +26,6 @@ export const fetchAllPosts = () => async dispatch => {
   dispatch(fetchAllPostsStart());
   try {
     const response = await axios.get("https://bloggy-api.herokuapp.com/posts");
-    console.log("response", response.data);
     dispatch(fetchAllPostsSuccess(response.data));
   } catch (error) {
     dispatch(fetchAllPostsError(error));
@@ -89,7 +88,6 @@ export const addComment = comment => async dispatch => {
       "https://bloggy-api.herokuapp.com/comments",
       comment
     );
-    console.log("data+comment", comment)
     dispatch(addCommentSuccess(data.data));
   } catch (error) {
     dispatch(addCommentError(error));

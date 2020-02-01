@@ -3,6 +3,66 @@ import { connect } from "react-redux";
 import { fetchPost, updatePost, addComment } from "../redux/postsOperations";
 import Comments from "../components/comments/Comments";
 import { withRouter } from "react-router-dom";
+import styled from "styled-components";
+
+const BackBtn = styled.button`
+color: #fff;
+    text-transform: uppercase;
+    text-decoration: none;
+    background: #60a3bc;
+    padding: 5px;
+    border-radius: 50px;
+    display: inline-block;
+    cursor: pointer;
+    font-size: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #cfa0c5;
+    font-weight: 700;
+    outline: none;
+    :hover {
+      text-shadow: 0px 0px 6px rgba(255, 255, 255, 1);
+transition: all 0.4s ease 0s;
+box-shadow: 0px 0px 5px 2px rgba(235,170,235,1);
+    }
+`
+
+const UpdateBtn = styled.button`
+ text-transform: uppercase;
+    text-decoration: none;
+    background: #4DDA8A;
+    padding: 5px;
+    border-radius: 50px;
+    display: inline-block;
+    cursor: pointer;
+    font-size: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #72D79E;
+    font-weight: 700;
+    outline: none;
+    color: white;
+    :hover {
+      text-shadow: 0px 0px 6px rgba(255, 255, 255, 1);
+transition: all 0.4s ease 0s;
+box-shadow: 0px 0px 5px 2px rgba(155, 242, 192,1);
+    }
+`
+
+const UpdateTitle = styled.input`
+margin: 0;
+padding: 5px;
+border: none;
+border: solid 1px grey;
+border-radius: 5px;
+margin-right: 10px;
+`
+const Updatebody = styled.textarea`
+margin: 0;
+padding: 15px 10px;
+border: none;
+border: solid 1px grey;
+border-radius: 5px;
+margin-right: 10px;
+`
 
 class PostPage extends Component {
   state = {
@@ -37,13 +97,9 @@ class PostPage extends Component {
     e.preventDefault();
     const post = {
       ...this.props.post,
-      title: this.state.titleEditValue,
+      title: this.state.titleEditValue
     };
     this.props.updatePost(this.props.post.id, post);
-    console.log("update title", post);
-    // this.props.fetchPost(6);
-    console.log("state=>", this.state);
-    console.log("redux state", this.props.post);
     this.setState({ titleEdit: false });
   };
 
@@ -66,54 +122,47 @@ class PostPage extends Component {
   };
 
   handleChangeEditPostBody = e => {
-    console.log(e.target.value);
     this.setState({ bodyEditValue: e.target.value });
   };
   render() {
-    const { title, body, id, comments } = this.props.post;
+    const { title, body, comments } = this.props.post;
 
     return (
       <>
-        <button type="button" onClick={this.handleGoBack}>
+        <BackBtn type="button" onClick={this.handleGoBack}>
           &larr; Back to all posts
-        </button>
+        </BackBtn>
         <h3>{title}</h3>
         {!this.state.titleEdit && (
-          <button onClick={this.handleClickEditPostTitle}>Update Title</button>
+          <UpdateBtn onClick={this.handleClickEditPostTitle}>Update Title</UpdateBtn>
         )}
 
         {this.state.titleEdit && (
           <form onSubmit={this.handleSubmitEditPostTitle}>
-            <input
+            <UpdateTitle
               placeholder="Change your title"
               onChange={this.handleChangeEditPostTitle}
               value={this.state.titleEditValue}
             />
-            <button type="submit">CHANGE</button>
+            <UpdateBtn type="submit">CHANGE</UpdateBtn>
           </form>
         )}
         <p>{body}</p>
         {!this.state.bodyEdit && (
-          <button onClick={this.handleClickEditPostBody}>Update Text</button>
+          <UpdateBtn onClick={this.handleClickEditPostBody}>Update Text</UpdateBtn>
         )}
 
         {this.state.bodyEdit && (
           <form onSubmit={this.handleSubmitEditPostBody}>
-            <textarea
+            <Updatebody
               onChange={this.handleChangeEditPostBody}
               placeholder="change your post description"
               value={this.state.bodyEditValue}
             />
-            <button type="submit">CHANGE</button>
+            <UpdateBtn type="submit">CHANGE</UpdateBtn>
           </form>
         )}
-        {/* <button type="button">DELETE</button> */}
-        <Comments comments={comments} postId={this.state.id}/>
-        {/* {comments && (
-          <>
-         
-          </>
-        )} */}
+        <Comments comments={comments} postId={this.state.id} />
       </>
     );
   }

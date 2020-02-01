@@ -23,7 +23,6 @@ export const post = (state = initialstate.post, { type, payload }) => {
     case Type.FETCH_ONE_POST_SUCCESS:
       return payload.post;
     case Type.UPDATE_POST_SUCCESS:
-      console.log("update post reducer", type, payload);
       return { ...state, ...payload.post };
     case Type.ADD_COMMENT_SUCCESS:
       return {...state, comments:[ ...state.comments, {...payload.comment}]}
