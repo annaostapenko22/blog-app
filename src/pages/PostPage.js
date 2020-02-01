@@ -1,27 +1,28 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { fetchPost, updatePost } from "../redux/postsOperations";
-import AddComment from "../components/add-comment/AddComment"
+import { fetchPost, updatePost, addComment } from "../redux/postsOperations";
+import Comments from "../components/comments/Comments";
+import { withRouter } from "react-router-dom";
+
 class PostPage extends Component {
   state = {
     titleEdit: false,
     titleEditValue: "",
     bodyEdit: false,
     bodyEditValue: "",
-    id: null
-    // body: "",
-    // comments: []
+    id: null,
+    comments: []
   };
   async componentDidMount() {
-    const data = await this.props.fetchPost(6);
-    // console.log("STATE", this.props.post);
-    // this.setState({titleEditValue: this.props.post.title,
-    // bodyEditValue: this.props.post.body})
-    console.log("data =>", data)
-    console.log("=> =>",this.state)
-    console.log("id", this.props.post.id)
+    const id = this.props.match.params.id;
+    await this.props.fetchPost(id);
+    this.setState({
+      titleEditValue: this.props.post.title,
+      bodyEditValue: this.props.post.body,
+      id: this.props.post.id,
+      comments: this.props.post.comments
+    });
   }
-
 
   handleGoBack = () => {
     const { history } = this.props;
@@ -35,16 +36,18 @@ class PostPage extends Component {
   handleSubmitEditPostTitle = e => {
     e.preventDefault();
     const post = {
-      title: this.state.titleEditValue
-    
+      ...this.props.post,
+      title: this.state.titleEditValue,
     };
-    this.props.updatePost(this.props.post.id, {...post});
-    this.props.fetchPost(6);
+    this.props.updatePost(this.props.post.id, post);
+    console.log("update title", post);
+    // this.props.fetchPost(6);
+    console.log("state=>", this.state);
+    console.log("redux state", this.props.post);
     this.setState({ titleEdit: false });
   };
 
   handleChangeEditPostTitle = e => {
-    console.log("=>", e.target.value);
     this.setState({ titleEditValue: e.target.value });
   };
 
@@ -55,10 +58,10 @@ class PostPage extends Component {
   handleSubmitEditPostBody = e => {
     e.preventDefault();
     const post = {
-     
+      ...this.props.post,
       body: this.state.bodyEditValue
     };
-    this.props.updatePost(this.props.post.id, {...post});
+    this.props.updatePost(this.props.post.id, { ...post });
     this.setState({ bodyEdit: false });
   };
 
@@ -68,7 +71,7 @@ class PostPage extends Component {
   };
   render() {
     const { title, body, id, comments } = this.props.post;
-   
+
     return (
       <>
         <button type="button" onClick={this.handleGoBack}>
@@ -84,6 +87,7 @@ class PostPage extends Component {
             <input
               placeholder="Change your title"
               onChange={this.handleChangeEditPostTitle}
+              value={this.state.titleEditValue}
             />
             <button type="submit">CHANGE</button>
           </form>
@@ -98,12 +102,13 @@ class PostPage extends Component {
             <textarea
               onChange={this.handleChangeEditPostBody}
               placeholder="change your post description"
+              value={this.state.bodyEditValue}
             />
             <button type="submit">CHANGE</button>
           </form>
         )}
         {/* <button type="button">DELETE</button> */}
-<AddComment comments={comments}/>
+        <Comments comments={comments} postId={this.state.id}/>
         {/* {comments && (
           <>
          
@@ -120,7 +125,10 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   fetchPost,
-  updatePost
+  updatePost,
+  addComment
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(PostPage);
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(PostPage)
+);

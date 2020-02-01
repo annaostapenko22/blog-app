@@ -55,9 +55,9 @@ export const deletePostError = error => ({
 export const updatePostStart = () => ({
   type: Type.UPDATE_POST_START
 });
-export const updatePostSuccess = item => ({
+export const updatePostSuccess = post => ({
   type: Type.UPDATE_POST_SUCCESS,
-  payload: { item }
+  payload: { post }
 });
 export const updatePostError = error => ({
   type: Type.UPDATE_POST_SUCCESS,

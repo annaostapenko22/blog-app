@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 
 const PostItem = ({ items, handleDelete }) => (
   <li key={items.id} >
-    <NavLink to="/post">
+    <NavLink to={`/posts/${items.id}`} >
       <h3>{items.title}</h3>
       <p>{items.body}</p>
     </NavLink>

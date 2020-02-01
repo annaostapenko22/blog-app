@@ -17,7 +17,7 @@ class App extends Component {
         <Navigation />
         <Switch>
           <Route path="/" exact component={PostsAll} />
-          <Route path="/post" exact component={PostPage} />
+          <Route path="/posts/:id" exact component={PostPage} />
           <Route path="/postAdd" exact component={AddPost}/>
         </Switch>
       </div>
